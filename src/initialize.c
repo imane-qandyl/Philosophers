@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 09:44:36 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/10/24 16:38:32 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:31:44 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void init_philosophers(t_info *info,t_philosopher *philosophers)
         philosophers[i].id = i;
         philosophers[i].left_fork = &(info->forks[i]); // Left fork is the philosopher's own fork
         philosophers[i].right_fork = &(info->forks[(i + 1) % info->num_philosophers]); // Right fork is the next philosopher's fork
-        philosophers[i].last_meal_time = timestamp();
+        philosophers[i].last_meal_time = info->t_start;
         philosophers[i].meal_count = 0;
         philosophers[i].info = info;
         i++;
@@ -42,7 +42,7 @@ int	var_init(t_info *data, char **av)
 	data->t_sleep = ft_atoi(av[4]);
 	if (av[5]) {
         data->n_eat = ft_atoi(av[5]);
-        if (data->n_eat == 0) {
+        if (data->n_eat <= 0) {
             return 1; // n_eat must be a positive value
         }
     }

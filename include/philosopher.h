@@ -30,6 +30,7 @@ typedef struct s_info {
     int t_die;
     int t_eat;
     int t_sleep;
+    int t_think;
     int stop;
     long int		t_start;
     int n_meals;               // Optional: how many meals each philosopher must eat

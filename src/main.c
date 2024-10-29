@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:35:14 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/10/25 08:19:19 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:35:00 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,16 @@ int main(int argc, char **argv)
         i++;
     }
     pthread_join(death_checker_thread, NULL);
+    // Destroy mutexes before freeing memory
+    pthread_mutex_destroy(&data.print);
+    pthread_mutex_destroy(&data.m_stop);
+    pthread_mutex_destroy(&data.m_eat);
+    pthread_mutex_destroy(&data.dead);
+    i = 0;
+    while(i < data.num_philosophers) {
+        pthread_mutex_destroy(&data.forks[i]);
+        i++;
+    }
     free(data.philosopher);
     free(data.forks);
     return 0;
