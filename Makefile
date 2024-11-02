@@ -6,13 +6,13 @@
 #    By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 07:24:27 by imqandyl          #+#    #+#              #
-#    Updated: 2024/10/21 09:45:32 by imqandyl         ###   ########.fr        #
+#    Updated: 2024/11/02 10:04:57 by imqandyl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philosopher
+NAME = philo
 
-SRC = main.c utils.c routine.c initialize.c
+SRC = main.c utils.c routine.c initialize.c utils2.c
 OBJ = $(SRC:.c=.o)
 
 PATH_SRC = ./src/
@@ -41,10 +41,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
- #re debug
-
-# debug: FLAGS += -g
-# debug: re
-
-# delay:
-# 	python3 delay_o_meter.py

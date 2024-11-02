@@ -6,11 +6,23 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:52:26 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/10/25 08:19:30 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:21:22 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+static int	handle_overflow(int res, char digit, int signe)
+{
+	if ((res > INT_MAX / 10) || \
+		(res == INT_MAX / 10 && (digit - '0') > INT_MAX % 10))
+	{
+		if (signe == 1)
+			return (INT_MAX);
+		return (INT_MIN);
+	}
+	return (res * 10 + (digit - '0'));
+}
 
 int	ft_atoi(const char *str)
 {
@@ -19,22 +31,19 @@ int	ft_atoi(const char *str)
 	int	signe;
 
 	i = 0;
-	signe = 1;
 	res = 0;
+	signe = 1;
 	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == ' '))
 		i++;
-	if (str[i] == '-')
+	if (str[i] == '-' || str[i] == '+')
 	{
-		signe *= -1;
-		i++;
+		if (str[i++] == '-')
+			signe = -1;
+		else
+			signe = 1;
 	}
-	else if (str[i] == '+')
-		i++;
 	while (str[i] >= '0' && str[i] <= '9')
-	{
-		res = res * 10 + str[i] - '0';
-		i++;
-	}
+		res = handle_overflow(res, str[i++], signe);
 	return (res * signe);
 }
 
@@ -42,6 +51,7 @@ int	ft_isdigit(int character)
 {
 	return (character >= '0' && character <= '9');
 }
+
 int	check_num(char **str)
 {
 	int	i;
@@ -59,34 +69,5 @@ int	check_num(char **str)
 		}
 		i++;
 	}
-	return (0);
-}
-long long	timestamp(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	ft_usleep(int ms)
-{
-	long int	time;
-
-	time = timestamp();//returns the current time in milliseconds since 1970
-	while (timestamp() - time < ms)
-		usleep(ms / 10);
-}
-int	is_dead(t_philosopher *philosopher, int nb)
-{
-	pthread_mutex_lock(&philosopher->info->dead);
-	if (nb)
-		philosopher->info->stop = 1;
-	if (philosopher->info->stop)
-	{
-		pthread_mutex_unlock(&philosopher->info->dead);
-		return (1);
-	}
-	pthread_mutex_unlock(&philosopher->info->dead);
 	return (0);
 }
