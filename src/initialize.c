@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 09:44:36 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 19:20:54 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/02 21:59:19 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static int	init_mutexes_and_memory(t_info *data)
 {
 	int	i;
 
-	pthread_mutex_init(&data->print, NULL);
 	pthread_mutex_init(&data->m_stop, NULL);
 	pthread_mutex_init(&data->m_eat, NULL);
 	pthread_mutex_init(&data->dead, NULL);

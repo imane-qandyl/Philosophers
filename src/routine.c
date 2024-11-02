@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:31:10 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 19:05:43 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/02 21:35:17 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	thinking(t_philosopher *philosopher)
 	if (!is_dead(philosopher, 0) && !get_stop(philosopher->info))
 	{
 		print(philosopher, " is thinking\n");
-		ft_usleep(philosopher->info->t_think);
 	}
 }
 

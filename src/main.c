@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:35:14 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 19:26:58 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/02 21:53:06 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,8 @@ void	cleanup(t_info *data)
 {
 	int	i;
 
-	pthread_mutex_destroy(&data->print);
 	pthread_mutex_destroy(&data->m_stop);
 	pthread_mutex_destroy(&data->m_eat);
-	pthread_mutex_destroy(&data->dead);
 	i = 0;
 	while (i < data->num_philosophers)
 	{
@@ -60,14 +58,14 @@ void	print(t_philosopher *philosopher, char *str)
 {
 	long int	time;
 
-	pthread_mutex_lock(&(philosopher->info->print));
+	pthread_mutex_lock(&(philosopher->info->m_stop));
 	time = timestamp() - philosopher->info->t_start;
 	if (!philosopher->info->stop && time >= 0
 		&& time <= INT_MAX && !is_dead(philosopher, 0))
 		printf("%s%lld %d %s", GREEN,
 			timestamp() - philosopher->info->t_start,
 			philosopher->id, str);
-	pthread_mutex_unlock(&(philosopher->info->print));
+	pthread_mutex_unlock(&(philosopher->info->m_stop));
 }
 
 static int	init_data(t_info *data, int argc, char **argv)
@@ -82,6 +80,7 @@ static int	init_data(t_info *data, int argc, char **argv)
 	data->t_die = ft_atoi(argv[2]);
 	data->t_eat = ft_atoi(argv[3]);
 	data->t_sleep = ft_atoi(argv[4]);
+	data->n_eat = 0;
 	if (data->t_die < 60 || data->t_eat < 60 || data->t_sleep < 60)
 	{
 		fprintf(stderr, "Error: Time values must be at least 60 ms\n");

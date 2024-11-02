@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 09:11:48 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 19:05:21 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/02 21:59:24 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_info
 	int				n_meals;
 	int				n_eat;
 	t_philosopher	*philosopher;
-	pthread_mutex_t	print;
 	pthread_mutex_t	m_stop;
 	pthread_mutex_t	m_eat;
 	pthread_mutex_t	dead;

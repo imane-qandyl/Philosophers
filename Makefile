@@ -6,7 +6,7 @@
 #    By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 07:24:27 by imqandyl          #+#    #+#              #
-#    Updated: 2024/11/02 10:04:57 by imqandyl         ###   ########.fr        #
+#    Updated: 2024/11/02 21:00:13 by imqandyl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ PATH_SRC = ./src/
 SRC_FILES = $(addprefix $(PATH_SRC), $(SRC))
 OBJ_FILES = $(addprefix $(PATH_SRC), $(OBJ))
 
-CFLAGS = -Wall -Wextra -Werror -O3 -pthread -I./include
+CFLAGS = -Wall -Wextra -Werror -g -pthread -I./include
 CC = gcc
 
 HEADER = ./include/philosopher.h
