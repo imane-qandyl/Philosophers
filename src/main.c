@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:35:14 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 14:01:18 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:16:39 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,12 @@ int	main(int argc, char **argv)
 	if (init_data(&data, argc, argv) != 0)
 		return (1);
 	init_philosophers(&data, data.philosopher);
-	if (pthread_create(&death_checker_thread, NULL, check_death, (void *)&data) != 0)
-    {
-        cleanup(&data);
-        return (1);
-    }
+	if (pthread_create(&death_checker_thread, NULL, \
+	check_death, (void *)&data) != 0)
+	{
+		cleanup(&data);
+		return (1);
+	}
 	i = -1;
 	while (++i < data.num_philosophers)
 		pthread_create(&data.philosopher[i].thread, NULL,
