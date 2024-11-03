@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 10:04:17 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 21:58:58 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 13:43:39 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_usleep(int ms)
 
 	time = timestamp();
 	while (timestamp() - time < ms)
-		usleep(ms / 10);
+		usleep(100);
 }
 
 int	is_dead(t_philosopher *philosopher, int nb)
@@ -58,9 +58,7 @@ void	*check_death(void *arg)
 			if (timestamp() - info->philosopher[i].last_meal_time > info->t_die)
 			{
 				print(&info->philosopher[i], " has died\n");
-				pthread_mutex_lock(&info->m_stop);
 				info->stop = 1;
-				pthread_mutex_unlock(&info->m_stop);
 				pthread_mutex_unlock(&info->m_eat);
 				return (NULL);
 			}
