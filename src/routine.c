@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:31:10 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 21:35:17 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 23:11:11 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,13 @@ void	meal_counting(t_philosopher *philosopher)
 	{
 		philosopher->info->n_meals++;
 		if (philosopher->info->n_meals == philosopher->info->num_philosophers)
-			is_dead(philosopher, 2);
+			philosopher->info->stop = 1;
 	}
 	pthread_mutex_unlock(&philosopher->info->m_stop);
 }
 
 void	take_forks(t_philosopher *philosopher)
 {
-	if (philosopher->id % 2)
-		usleep(1000);
 	if (philosopher->left_fork < philosopher->right_fork)
 	{
 		pthread_mutex_lock(philosopher->left_fork);
@@ -64,19 +62,23 @@ void	take_forks(t_philosopher *philosopher)
 
 void	eating(t_philosopher *philosopher)
 {
-	while (!is_dead(philosopher, 0) && !get_stop(philosopher->info)
+	while (!get_stop(philosopher->info)
 		&& (philosopher->info->n_eat == 0
 			|| philosopher->meal_count < philosopher->info->n_eat))
 	{
+		if (philosopher->id % 2)
+			usleep(100);
 		take_forks(philosopher);
-		print(philosopher, " is eating\n");
 		pthread_mutex_lock(&(philosopher->info->m_eat));
 		philosopher->last_meal_time = timestamp();
 		pthread_mutex_unlock(&(philosopher->info->m_eat));
+		print(philosopher, " is eating\n");
 		ft_usleep(philosopher->info->t_eat);
-		meal_counting(philosopher);
 		pthread_mutex_unlock(philosopher->left_fork);
 		pthread_mutex_unlock(philosopher->right_fork);
+		meal_counting(philosopher);
+		if (get_stop(philosopher->info))
+			break ;
 		sleeping(philosopher);
 		thinking(philosopher);
 	}

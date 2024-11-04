@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 09:11:48 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 21:59:24 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:26:58 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_philosopher
 	int				meal_count;
 	long long		last_meal_time;
 	struct s_info	*info;
+	int				num_philosophers;
+	long int		t_start;
 }	t_philosopher;
 
 typedef struct s_info
@@ -52,7 +54,6 @@ typedef struct s_info
 	t_philosopher	*philosopher;
 	pthread_mutex_t	m_stop;
 	pthread_mutex_t	m_eat;
-	pthread_mutex_t	dead;
 	pthread_mutex_t	*forks;
 }	t_info;
 
@@ -75,5 +76,6 @@ void		eating(t_philosopher *philosopher);
 int			get_stop(t_info *info);
 void		cleanup(t_info *data);
 void		take_forks(t_philosopher *philosopher);
+void		set_stop(t_info *info);
 
 #endif

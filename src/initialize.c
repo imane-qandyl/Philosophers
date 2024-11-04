@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 09:44:36 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 13:59:41 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 23:10:38 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ void	init_philosophers(t_info *info, t_philosopher *philosophers)
 		philosophers[i].id = i;
 		philosophers[i].left_fork = &(info->forks[i]);
 		philosophers[i].right_fork = &(info->forks[(i + 1) % \
-info->num_philosophers]);
+		info->num_philosophers]);
 		philosophers[i].last_meal_time = info->t_start;
 		philosophers[i].meal_count = 0;
 		philosophers[i].info = info;
+		philosophers[i].num_philosophers = info->num_philosophers;
+		philosophers[i].t_start = info->t_start;
 		i++;
 	}
 }
@@ -37,7 +39,6 @@ static int	init_mutexes_and_memory(t_info *data)
 
 	pthread_mutex_init(&data->m_stop, NULL);
 	pthread_mutex_init(&data->m_eat, NULL);
-	pthread_mutex_init(&data->dead, NULL);
 	data->stop = 0;
 	data->n_meals = 0;
 	data->philosopher = malloc(sizeof(t_philosopher) * data->num_philosophers);

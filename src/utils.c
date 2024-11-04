@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:52:26 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/02 19:21:22 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 22:57:48 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,6 @@ int	ft_atoi(const char *str)
 	return (res * signe);
 }
 
-int	ft_isdigit(int character)
-{
-	return (character >= '0' && character <= '9');
-}
-
 int	check_num(char **str)
 {
 	int	i;
@@ -63,11 +58,28 @@ int	check_num(char **str)
 		j = 0;
 		while (str[i][j])
 		{
-			if (!ft_isdigit(str[i][j]))
+			if (str[i][j] < '0' || str[i][j] > '9')
 				return (1);
 			j++;
 		}
 		i++;
 	}
 	return (0);
+}
+
+long long	timestamp(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	ft_usleep(int ms)
+{
+	long int	time;
+
+	time = timestamp();
+	while (timestamp() - time < ms)
+		usleep(500);
 }

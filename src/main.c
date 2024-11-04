@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:35:14 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 14:16:39 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/03 23:03:34 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,14 @@ void	*philosopher_routine(void *arg)
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)arg;
-	if (philosopher->id % 2)
-		usleep(1000);
 	if (philosopher->info->num_philosophers == 1)
 	{
-		usleep(philosopher->info->t_die * 1000);
-		print(philosopher, "has died");
-		pthread_mutex_lock(&philosopher->info->m_stop);
-		philosopher->info->stop = 1;
-		pthread_mutex_unlock(&philosopher->info->m_stop);
+		print(philosopher, " has taken a fork\n");
+		philosopher->t_start = timestamp();
+		while (timestamp() - philosopher->t_start < philosopher->info->t_die)
+			usleep(100);
+		print(philosopher, " has died\n");
+		set_stop(philosopher->info);
 		return (NULL);
 	}
 	while (!get_stop(philosopher->info) && !is_dead(philosopher, 0))
@@ -44,7 +43,6 @@ void	cleanup(t_info *data)
 
 	pthread_mutex_destroy(&data->m_stop);
 	pthread_mutex_destroy(&data->m_eat);
-	pthread_mutex_destroy(&data->dead);
 	i = 0;
 	while (i < data->num_philosophers)
 	{
@@ -59,14 +57,16 @@ void	print(t_philosopher *philosopher, char *str)
 {
 	long int	time;
 
-	pthread_mutex_lock(&(philosopher->info->m_stop));
-	time = timestamp() - philosopher->info->t_start;
-	if (!philosopher->info->stop && time >= 0
+	time = timestamp() - philosopher->t_start;
+	if (!get_stop(philosopher->info) && time >= 0
 		&& time <= INT_MAX && !is_dead(philosopher, 0))
+	{
+		pthread_mutex_lock(&(philosopher->info->m_stop));
 		printf("%s%lld %d %s", GREEN,
 			timestamp() - philosopher->info->t_start,
-			philosopher->id, str);
-	pthread_mutex_unlock(&(philosopher->info->m_stop));
+			philosopher->id + 1, str);
+		pthread_mutex_unlock(&(philosopher->info->m_stop));
+	}
 }
 
 static int	init_data(t_info *data, int argc, char **argv)
@@ -84,7 +84,7 @@ static int	init_data(t_info *data, int argc, char **argv)
 	data->n_eat = 0;
 	if (data->t_die < 60 || data->t_eat < 60 || data->t_sleep < 60)
 	{
-		fprintf(stderr, "Error: Time values must be at least 60 ms\n");
+		printf("Error: Time values must be at least 60 ms\n");
 		return (1);
 	}
 	return (var_init(data, argv));
