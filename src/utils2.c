@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 10:04:17 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 23:01:04 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:59:05 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ void	*check_death(void *arg)
 	while (!get_stop(info))
 	{
 		i = 0;
-		while (i < info->num_philosophers)
+		while (i < info->number_of_philosophers)
 		{
 			pthread_mutex_lock(&info->m_eat);
-			if (timestamp() - info->philosopher[i].last_meal_time > info->t_die)
+			if (timestamp() - info->philosopher[i].last_meal_time > \
+			info->time_to_die)
 			{
 				print(&info->philosopher[i], " has died\n");
 				set_stop(info);

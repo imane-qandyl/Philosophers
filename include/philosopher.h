@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 09:11:48 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 18:26:58 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:58:05 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ typedef struct s_philosopher
 	int				meal_count;
 	long long		last_meal_time;
 	struct s_info	*info;
-	int				num_philosophers;
+	int				number_of_philosophers;
 	long int		t_start;
 }	t_philosopher;
 
 typedef struct s_info
 {
-	int				num_philosophers;
-	int				t_die;
-	int				t_eat;
-	int				t_sleep;
+	int				number_of_philosophers;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 	int				t_think;
 	int				stop;
 	long int		t_start;

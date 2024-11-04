@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 09:44:36 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 23:10:38 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:58:28 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ void	init_philosophers(t_info *info, t_philosopher *philosophers)
 
 	i = 0;
 	info->t_start = timestamp();
-	while (i < info->num_philosophers)
+	while (i < info->number_of_philosophers)
 	{
 		philosophers[i].id = i;
 		philosophers[i].left_fork = &(info->forks[i]);
 		philosophers[i].right_fork = &(info->forks[(i + 1) % \
-		info->num_philosophers]);
+		info->number_of_philosophers]);
 		philosophers[i].last_meal_time = info->t_start;
 		philosophers[i].meal_count = 0;
 		philosophers[i].info = info;
-		philosophers[i].num_philosophers = info->num_philosophers;
+		philosophers[i].number_of_philosophers = info->number_of_philosophers;
 		philosophers[i].t_start = info->t_start;
 		i++;
 	}
@@ -41,10 +41,12 @@ static int	init_mutexes_and_memory(t_info *data)
 	pthread_mutex_init(&data->m_eat, NULL);
 	data->stop = 0;
 	data->n_meals = 0;
-	data->philosopher = malloc(sizeof(t_philosopher) * data->num_philosophers);
+	data->philosopher = malloc(sizeof(t_philosopher) * \
+	data->number_of_philosophers);
 	if (data->philosopher == NULL)
 		return (1);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+	data->forks = malloc(sizeof(pthread_mutex_t) * \
+	data->number_of_philosophers);
 	if (data->forks == NULL)
 	{
 		printf("%s Failed to allocate memory for forks", RED);
@@ -52,7 +54,7 @@ static int	init_mutexes_and_memory(t_info *data)
 		return (1);
 	}
 	i = -1;
-	while (++i < data->num_philosophers)
+	while (++i < data->number_of_philosophers)
 		pthread_mutex_init(&data->forks[i], NULL);
 	return (0);
 }
@@ -64,20 +66,20 @@ static int	validate_input(t_info *data, char **av)
 		printf("%s Invalid Arguments\n", RED);
 		return (1);
 	}
-	data->num_philosophers = ft_atoi(av[1]);
-	if (data->num_philosophers <= 0 || data->num_philosophers \
+	data->number_of_philosophers = ft_atoi(av[1]);
+	if (data->number_of_philosophers <= 0 || data->number_of_philosophers \
 	> MAX_PHILOSOPHERS)
 	{
 		printf("%s Error: Number of philosophers must be between 1 and %d\n",
 			RED, MAX_PHILOSOPHERS);
 		return (1);
 	}
-	data->t_die = ft_atoi(av[2]);
-	data->t_eat = ft_atoi(av[3]);
-	data->t_sleep = ft_atoi(av[4]);
-	if (data->t_die <= 0 || data->t_die > INT_MAX
-		|| data->t_eat <= 0 || data->t_eat > INT_MAX
-		|| data->t_sleep <= 0 || data->t_sleep > INT_MAX)
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	if (data->time_to_die <= 0 || data->time_to_die > INT_MAX
+		|| data->time_to_eat <= 0 || data->time_to_eat > INT_MAX
+		|| data->time_to_sleep <= 0 || data->time_to_sleep > INT_MAX)
 	{
 		printf("%s Error: Time values must be positive\n", RED);
 		return (1);

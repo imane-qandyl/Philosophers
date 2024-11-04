@@ -6,7 +6,7 @@
 /*   By: imqandyl <imqandyl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 07:35:14 by imqandyl          #+#    #+#             */
-/*   Updated: 2024/11/03 23:03:34 by imqandyl         ###   ########.fr       */
+/*   Updated: 2024/11/04 19:08:57 by imqandyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ void	*philosopher_routine(void *arg)
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)arg;
-	if (philosopher->info->num_philosophers == 1)
+	if (philosopher->info->number_of_philosophers == 1)
 	{
 		print(philosopher, " has taken a fork\n");
 		philosopher->t_start = timestamp();
-		while (timestamp() - philosopher->t_start < philosopher->info->t_die)
+		while (timestamp() - philosopher->t_start \
+		< philosopher->info->time_to_die)
 			usleep(100);
 		print(philosopher, " has died\n");
 		set_stop(philosopher->info);
@@ -44,7 +45,7 @@ void	cleanup(t_info *data)
 	pthread_mutex_destroy(&data->m_stop);
 	pthread_mutex_destroy(&data->m_eat);
 	i = 0;
-	while (i < data->num_philosophers)
+	while (i < data->number_of_philosophers)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
 		i++;
@@ -73,16 +74,17 @@ static int	init_data(t_info *data, int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
 	{
-		printf("%sUsage: %s num_philosophers time_to_die time_to_eat"
+		printf("%sUsage: %s number_of_philosophers time_to_die time_to_eat"
 			" time_to_sleep [num_times_to_eat]\n", BYELLOW, argv[0]);
 		return (1);
 	}
-	data->num_philosophers = ft_atoi(argv[1]);
-	data->t_die = ft_atoi(argv[2]);
-	data->t_eat = ft_atoi(argv[3]);
-	data->t_sleep = ft_atoi(argv[4]);
+	data->number_of_philosophers = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
 	data->n_eat = 0;
-	if (data->t_die < 60 || data->t_eat < 60 || data->t_sleep < 60)
+	if (data->time_to_die < 60 || data->time_to_eat < 60 \
+	|| data->time_to_sleep < 60)
 	{
 		printf("Error: Time values must be at least 60 ms\n");
 		return (1);
@@ -106,11 +108,11 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	i = -1;
-	while (++i < data.num_philosophers)
+	while (++i < data.number_of_philosophers)
 		pthread_create(&data.philosopher[i].thread, NULL,
 			philosopher_routine, (void *)&data.philosopher[i]);
 	i = -1;
-	while (++i < data.num_philosophers)
+	while (++i < data.number_of_philosophers)
 		pthread_join(data.philosopher[i].thread, NULL);
 	pthread_join(death_checker_thread, NULL);
 	cleanup(&data);
